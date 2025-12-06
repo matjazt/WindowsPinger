@@ -6,7 +6,6 @@ $pingEntries = @(
     @{ Name = "Google DNS"; Address = "8.8.8.8"; Timeout = 1000; Count = 3; State = "Unknown"; LastChange = $null },
     @{ Name = "Cloudflare DNS"; Address = "1.1.1.1"; Timeout = 1000; Count = 3; State = "Unknown"; LastChange = $null },
     @{ Name = "Local Gateway"; Address = "192.168.1.1"; Timeout = 500; Count = 6; State = "Unknown"; LastChange = $null }
-    @{ Name = "UbuntuDev"; Address = "10.255.254.150"; Timeout = 500; Count = 2; State = "Unknown"; LastChange = $null }
 )
 
 # Interval between pings in seconds, note that this also affects the SvcWatchdog UDP ping interval, so it should be
