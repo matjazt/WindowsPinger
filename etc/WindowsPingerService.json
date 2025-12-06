@@ -1,0 +1,26 @@
+{
+  "log": {
+    "minConsoleLevel": 99,
+    "minFileLevel": 1,
+    "filePath": "log\\WindowsPingerService.log",
+    "maxFileSize": 10000000,
+    "maxOldFiles": 5,
+    "maxWriteDelay": 500,
+    "logThreadId": false
+  },
+  "svcWatchDog": {
+    "workDir": "..",
+    "args":  [
+      "powershell.exe",
+      "-ExecutionPolicy",
+      "Unrestricted",
+      "-File",
+      "scripts\\WindowsPinger.ps1"
+    ],
+    "usePath": true,
+    "autoStart": true,
+    "restartDelay": 5000,
+    "shutdownTime": 3000,
+    "watchdogTimeout": 60000
+  }
+}
