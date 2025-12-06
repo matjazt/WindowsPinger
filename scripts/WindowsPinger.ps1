@@ -3,10 +3,10 @@ filter Logger { "$(Get-Date -Format G): $_" | Out-File -Append "log\\WindowsPing
 
 # Configuration: Ping entries
 $pingEntries = @(
-    @{ Name = "Google DNS"; Address = "8.8.8.8"; Timeout = 1000; State = "Unknown"; LastChange = $null },
-    @{ Name = "Cloudflare DNS"; Address = "1.1.1.1"; Timeout = 1000; State = "Unknown"; LastChange = $null },
-    @{ Name = "Local Gateway"; Address = "192.168.1.1"; Timeout = 500; State = "Unknown"; LastChange = $null }
-    @{ Name = "UbuntuDev"; Address = "10.255.254.15"; Timeout = 500; State = "Unknown"; LastChange = $null }
+    @{ Name = "Google DNS"; Address = "8.8.8.8"; Timeout = 1000; Count = 3; State = "Unknown"; LastChange = $null },
+    @{ Name = "Cloudflare DNS"; Address = "1.1.1.1"; Timeout = 1000; Count = 3; State = "Unknown"; LastChange = $null },
+    @{ Name = "Local Gateway"; Address = "192.168.1.1"; Timeout = 500; Count = 6; State = "Unknown"; LastChange = $null }
+    @{ Name = "UbuntuDev"; Address = "10.255.254.150"; Timeout = 500; Count = 2; State = "Unknown"; LastChange = $null }
 )
 
 # Interval between pings in seconds, note that this also affects the SvcWatchdog UDP ping interval, so it should be
@@ -61,9 +61,15 @@ while ($true) {
     # Ping each entry and track state changes
     $currentTime = Get-Date
     foreach ($entry in $pingEntries) {
-        #$result = Get-WmiObject -Class Win32_PingStatus -Filter "Address='${entry.Address}' and Timeout=${entry.Timeout}"
-        $result = Get-WmiObject -Class Win32_PingStatus -Filter "Address = '$($entry.Address)' AND Timeout = $($entry.Timeout)"
-        $pingResult = ($result.StatusCode -eq 0)
+        # Try to ping up to Count times, stop if successful
+        $pingResult = $false
+        for ($i = 1; $i -le $entry.Count; $i++) {
+            $result = Get-WmiObject -Class Win32_PingStatus -Filter "Address = '$($entry.Address)' AND Timeout = $($entry.Timeout)"
+            if ($result.StatusCode -eq 0) {
+                $pingResult = $true
+                break
+            }
+        }
         $newState = if ($pingResult) { "Accessible" } else { "Inaccessible" }
         
         if ($entry.State -ne $newState) {
