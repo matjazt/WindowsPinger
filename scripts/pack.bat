@@ -14,7 +14,8 @@ mkdir %OUTPUTFOLDER%\doc\SvcWatchDog
 copy /y %SVCWATCHDOGFOLDER%\SvcWatchDog\SvcWatchDog.exe %OUTPUTFOLDER%\Service\WindowsPingerService.exe
 copy /y %SVCWATCHDOGFOLDER%\Doc\* %OUTPUTFOLDER%\Doc\SvcWatchDog
 
-xcopy /y /s ..\scripts\*.ps1 %OUTPUTFOLDER%\scripts
+copy /y ..\scripts\*.ps1 %OUTPUTFOLDER%\scripts
+copy /y ..\README.md %OUTPUTFOLDER%\doc
 
 copy /y ..\Etc\WindowsPingerService.json %OUTPUTFOLDER%\Service
 
